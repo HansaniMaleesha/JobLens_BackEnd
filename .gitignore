@@ -11,3 +11,5 @@ credentials.json
 cvExtractor/
 
 JobLens-BE/firebase-service-account.json
+cvExtractor/credentials.json
+

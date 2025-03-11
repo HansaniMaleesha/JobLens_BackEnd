@@ -1,15 +1,13 @@
-# Node.js
-node_modules/
-package-lock.json
-
-# Python
-__pycache__/
-*.pyc
-.env
-credentials.json
-# Ignore cvExtractor folder
-cvExtractor/
-
-JobLens-BE/firebase-service-account.json
+# Ignore Python virtual environments
+cvExtractor/venv/
 cvExtractor/credentials.json
 
+# Ignore Node.js modules
+JobLens-BE/node_modules/
+JobLens-BE/firebaseService
+
+
+
+# Ignore log files and other system-specific files
+*.log
+.DS_Store

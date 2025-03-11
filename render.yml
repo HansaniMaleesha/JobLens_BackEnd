@@ -3,7 +3,8 @@ services:
     name: joblense-be
     env: node
     buildCommand: cd JobLense-BE && npm install
-    startCommand: node server
+    startCommand: cd JobLense-BE && node server
+
     plan: free
   - type: web
     name: cvextractor

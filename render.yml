@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: joblense-be
+    name: joblens-be
     env: node
-    buildCommand: cd JobLense-BE && npm install
-    startCommand: cd JobLense-BE && node server
+    buildCommand: cd JobLens-BE && npm install
+    startCommand: cd JobLens-BE && node server
 
     plan: free
   - type: web

@@ -7,6 +7,8 @@ cvExtractor/credentials.json
 JobLens-BE/node_modules/
 JobLens-BE/firebaseService
 
+.env
+
 
 
 # Ignore log files and other system-specific files

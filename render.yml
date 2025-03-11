@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: joblense-be
+    env: node
+    buildCommand: cd JobLense-BE && npm install
+    startCommand: node server
+    plan: free
+  - type: web
+    name: cvextractor
+    env: python
+    buildCommand: cd cvExtractor && pip install -r requirements.txt
+    startCommand: python3 cvExtractor/main.py
+    plan: free

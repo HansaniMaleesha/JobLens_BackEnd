@@ -2,6 +2,7 @@
 cvExtractor/venv/
 cvExtractor/credentials.json
 
+
 # Ignore Node.js modules
 JobLens-BE/node_modules/
 JobLens-BE/firebaseService

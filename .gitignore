@@ -9,8 +9,3 @@ JobLens-BE/firebaseService
 
 .env
 
-
-
-# Ignore log files and other system-specific files
-*.log
-.DS_Store

@@ -37,11 +37,11 @@ const uploadCV = async (req, res) => {
 
             if (error) {
                 console.error(` Error executing Python script: ${error.message}`);
-                return res.status(500).json({ message: "Error extracting CV data", error: error.message });
+                return res.status(500).json({ message: "Error extracting CV data" });
             }
             if (stderr) {
                 console.error(` Python script error: ${stderr}`);
-                return res.status(500).json({ message: "Error extracting CV data", error: stderr });
+                return res.status(500).json({ message: "Error extracting CV data" });
             }
 
             // Save application details to MySQL
@@ -50,7 +50,7 @@ const uploadCV = async (req, res) => {
                 console.log("Saved application details to MySQL");
             } catch (dbError) {
                 console.error("Database Error:", dbError);
-                return res.status(500).json({ message: "Error saving application data", error: dbError.message });
+                return res.status(500).json({ message: "Error saving application data" });
             }
 
             // Delete the temporary file after processing
@@ -58,13 +58,13 @@ const uploadCV = async (req, res) => {
 
             res.status(200).json({
                 message: "Application Submitted!",
-                cv_url: cvURL
+
             });
         });
 
     } catch (error) {
         console.error("Unexpected Error:", error);
-        res.status(500).json({ message: "Error processing application", error: error.message });
+        res.status(500).json({ message: "Error processing application" });
     }
 };
 

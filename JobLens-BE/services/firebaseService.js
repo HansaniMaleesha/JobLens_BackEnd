@@ -2,13 +2,21 @@ require("dotenv").config();
 const { initializeApp, cert } = require("firebase-admin/app");
 const { getStorage } = require("firebase-admin/storage");
 
-// ✅ Load Firebase credentials from service account JSON
-const serviceAccount = require("../firebase-service-account.json");
+const base64ServiceAccount = process.env.FIREBASE_BASE64;
+
+if (!base64ServiceAccount) {
+    throw new Error("FIREBASE_BASE64 environment variable is missing!");
+}
+
+// Decode Base64 back to JSON
+const serviceAccount = JSON.parse(Buffer.from(base64ServiceAccount, 'base64').toString('utf-8'));
+
+
 
 // Initialize Firebase app with service account
 initializeApp({
     credential: cert(serviceAccount),
-    storageBucket: process.env.FIREBASE_BUCKET, // Make sure your .env file has this correct value
+    storageBucket: "joblens-6a8c0.firebasestorage.app",  // Make sure your .env file has this correct value
 });
 
 const storage = getStorage();

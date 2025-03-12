@@ -1,12 +1,12 @@
-require("dotenv").config();
+
 const mysql = require("mysql2/promise");  // Use mysql2/promise for promise-based queries
 
 // Create a pool (recommended for multiple queries and better performance)
 const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+    host: 'localhost',       // MySQL server host
+    user: 'root',            // MySQL username
+    password: 'Hana@0320',            // MySQL password
+    database: 'joblens_db'  // Your database name
 });
 
 // Test the connection (optional but useful for debugging)

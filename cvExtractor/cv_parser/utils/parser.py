@@ -1,8 +1,32 @@
 import sys
 import fitz  # PyMuPDF
 import re
+import os
+import base64
 import gspread
+import json
+from dotenv import load_dotenv
 from google.oauth2.service_account import Credentials
+from google.oauth2 import service_account
+
+# Load environment variables from the .env file
+load_dotenv()
+
+# Step 1: Get the base64 encoded credentials string from the environment
+encoded_credentials = os.getenv("CREDENTIALS_BASE64")
+
+# Step 2: Decode the base64 string
+if encoded_credentials is None:
+    raise ValueError("CREDENTIALS_BASE64 is not set in the .env file")
+
+decoded_credentials = base64.b64decode(encoded_credentials).decode('utf-8')
+print("Decoded Credentials:", decoded_credentials)  # Log decoded credentials to verify
+
+# Step 3: Load the decoded JSON string into a Python dictionary
+credentials_dict = json.loads(decoded_credentials)
+
+# Check if the credentials are loaded correctly
+print("Credentials Dictionary:", credentials_dict)
 
 
 def extract_text_from_pdf(pdf_path):
@@ -60,12 +84,19 @@ def upload_to_google_sheets(data, cv_link):
     try:
         print("Connecting to Google Sheets...")
         SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-        creds = Credentials.from_service_account_file('credentials.json', scopes=SCOPES)
+        creds = service_account.Credentials.from_service_account_info(credentials_dict, scopes=SCOPES)
+
+        # Verify that the credentials are valid
+        print("Credentials are valid:", creds.valid)
+
         client = gspread.authorize(creds)
+
+        # Check if the connection is successful
+        print("Google Sheets client connected.")
+
         SHEET_ID = "16EFjHDM8etpajIKWd9TYdoQ_sW4pqgZQPdnplGfCXBc"
         sheet = client.open_by_key(SHEET_ID).sheet1
-          
-  
+
         # Rearranged the data to match the sheet columns
         row = [
             data['name'], 
@@ -83,4 +114,6 @@ def upload_to_google_sheets(data, cv_link):
 
     except Exception as e:
         print(f"Google Sheets Upload Error: {e}")
-
+        # Additional detailed logging
+        if hasattr(e, 'response'):
+            print("Error response from Google Sheets:", e.response)

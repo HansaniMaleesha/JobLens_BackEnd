@@ -1,7 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
-    host: process.env.DB_HOST, dialect: "mysql", logging: false,
+const sequelize = new Sequelize("joblens_db", "root", "Hana@0320", {
+    host: "localhost",
+    dialect: "mysql",
+    logging: false,
 });
 
 const JobApplication = sequelize.define("JobApplication", {

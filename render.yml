@@ -2,8 +2,9 @@ services:
   - type: web
     name: joblens-be
     env: node
-    buildCommand: 
-      apt-get update && apt-get install -y nodejs npm
+    buildCommand: |
+      curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+      apt-get install -y nodejs
       cd JobLens-BE && npm install
     startCommand: cd JobLens-BE && node server
     plan: free

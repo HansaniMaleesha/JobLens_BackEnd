@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +24,8 @@
     "openai": "^4.86.2",
     "pdf-parse": "^1.1.1",
     "sequelize": "^6.37.6"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

@@ -1,20 +1,19 @@
+# Node.js Service (JobLens-BE)
+[project]
+name = "joblens"
 
-[services.joblens-be]
-type = "web"
-name = "joblens-be"
+# Node.js Configuration
+[service "joblens-be"]
 env = "node"
-build = "cd JobLens-BE && npm install"
-start = "cd JobLens-BE && node server.js"
-plan = "free"
-[services.joblens-be.env]
-NODE_VERSION = "18"
+rootDirectory = "JobLens-BE"
+buildCommand = "npm install"
+startCommand = "node server.js"
+provider = "railway"
 
-[services.cvextractor]
-type = "web"
-name = "cvextractor"
+# Python Service (cvExtractor)
+[service "cvextractor"]
 env = "python"
-build = "cd cvExtractor && pip install -r requirements.txt"
-start = "python3 cvExtractor/main.py"
-plan = "free"
-[services.cvextractor.env]
-PYTHON_VERSION = "3.10"
+rootDirectory = "cvExtractor"
+buildCommand = "pip install -r requirements.txt"
+startCommand = "python3 main.py"
+provider = "railway"

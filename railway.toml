@@ -1,9 +1,9 @@
-# Node.js Service (JobLens-BE)
+# Project Configuration
 [project]
 name = "joblens"
 
-# Node.js Configuration
-[service "joblens-be"]
+# Node.js Service (JobLens-BE)
+[service."joblens-be"]
 env = "node"
 rootDirectory = "JobLens-BE"
 buildCommand = "npm install"
@@ -11,7 +11,7 @@ startCommand = "node server.js"
 provider = "railway"
 
 # Python Service (cvExtractor)
-[service "cvextractor"]
+[service."cvextractor"]
 env = "python"
 rootDirectory = "cvExtractor"
 buildCommand = "pip install -r requirements.txt"

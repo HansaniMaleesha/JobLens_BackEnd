@@ -1,16 +1,20 @@
-services:
-  - type: web
-    name: joblens-be
-    env: node
-    buildCommand: |
-      curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-      apt-get install -y nodejs
-      cd JobLens-BE && npm install
-    startCommand: cd JobLens-BE && node server
-    plan: free
-  - type: web
-    name: cvextractor
-    env: python
-    buildCommand: cd cvExtractor && pip install -r requirements.txt
-    startCommand: python3 cvExtractor/main.py
-    plan: free
+
+[services.joblens-be]
+type = "web"
+name = "joblens-be"
+env = "node"
+build = "cd JobLens-BE && npm install"
+start = "cd JobLens-BE && node server.js"
+plan = "free"
+[services.joblens-be.env]
+NODE_VERSION = "18"
+
+[services.cvextractor]
+type = "web"
+name = "cvextractor"
+env = "python"
+build = "cd cvExtractor && pip install -r requirements.txt"
+start = "python3 cvExtractor/main.py"
+plan = "free"
+[services.cvextractor.env]
+PYTHON_VERSION = "3.10"

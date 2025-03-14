@@ -20,13 +20,12 @@ if encoded_credentials is None:
     raise ValueError("CREDENTIALS_BASE64 is not set in the .env file")
 
 decoded_credentials = base64.b64decode(encoded_credentials).decode('utf-8')
-print("Decoded Credentials:", decoded_credentials)  # Log decoded credentials to verify
+
 
 # Step 3: Load the decoded JSON string into a Python dictionary
 credentials_dict = json.loads(decoded_credentials)
 
-# Check if the credentials are loaded correctly
-print("Credentials Dictionary:", credentials_dict)
+
 
 
 def extract_text_from_pdf(pdf_path):

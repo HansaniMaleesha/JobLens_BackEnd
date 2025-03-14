@@ -1,3 +1,5 @@
+const axios = require('axios');
+const FormData = require('form-data');
 const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
@@ -15,35 +17,44 @@ const uploadCV = async (req, res) => {
 
         if (!file) return res.status(400).json({ message: "CV file is required" });
 
+        // Log file details for debugging
+        console.log('File:', file);  // Log the file object (check if it exists)
+        console.log('File Buffer Length:', file.buffer ? file.buffer.length : 0);  // Check if buffer is valid
+        console.log('File Name:', file.originalname);  // Check the file name
+
         // Define paths
-        const tempFilePath = path.join(__dirname, "../uploads", file.originalname);
-        const pythonScriptPath = path.resolve("../../cvExtractor/main.py"); // Using resolve to ensure correct path
+        const tempFilePath = path.join(__dirname, "../uploads", Date.now() + "-" + file.originalname);
 
         // Save file to disk
         fs.writeFileSync(tempFilePath, file.buffer);
         console.log("Saved file to:", tempFilePath);
-        console.log("Executing Python script at:", pythonScriptPath);
-
-        // Detect Python version
-        const pythonCommand = process.platform === "win32" ? "python" : "python3";
 
         // Upload CV to Firebase and get the URL
         const cvURL = await uploadToFirebase(file);
         console.log("Uploaded CV to Firebase:", cvURL);
 
-        // Execute Python script and pass the file path and Firebase URL
-        exec(`${pythonCommand} "${pythonScriptPath}" "${tempFilePath}" "${cvURL}"`, async (error, stdout, stderr) => {
-            console.log(" Python Execution Started...");
+        // Log the Firebase URL to ensure it's valid
+        console.log('cvLink:', cvURL);
 
-            if (error) {
-                console.error(` Error executing Python script: ${error.message}`);
-                return res.status(500).json({ message: "Error extracting CV data" });
-            }
-            if (stderr) {
-                console.error(` Python script error: ${stderr}`);
-                return res.status(500).json({ message: "Error extracting CV data" });
-            }
+        // Create FormData to send to Python backend
+        const formData = new FormData();
+        formData.append('file', file.buffer, file.originalname); // Appending file
+        formData.append('cv_link', cvURL); // Appending the Firebase URL
 
+        // Log headers and FormData before sending
+        console.log('Request Headers:', formData.getHeaders());
+
+        // Make HTTP request to Python backend
+        const pythonApiUrl = 'https://cvpipeline-python-production.up.railway.app/process_cv'; // Adjust this URL
+
+        const response = await axios.post(pythonApiUrl, formData, {
+            headers: formData.getHeaders(),
+        });
+
+        // Check response from Python API
+        console.log('Response from Python API:', response.data);
+
+        if (response.data.message === "CV processed successfully") {
             // Save application details to MySQL
             try {
                 await JobApplication.create({ name, email, phone, cv_url: cvURL });
@@ -56,12 +67,10 @@ const uploadCV = async (req, res) => {
             // Delete the temporary file after processing
             fs.unlinkSync(tempFilePath);
 
-            res.status(200).json({
-                message: "Application Submitted!",
-
-            });
-        });
-
+            res.status(200).json({ message: "Application Submitted!" });
+        } else {
+            res.status(500).json({ message: "Error processing CV data" });
+        }
     } catch (error) {
         console.error("Unexpected Error:", error);
         res.status(500).json({ message: "Error processing application" });
